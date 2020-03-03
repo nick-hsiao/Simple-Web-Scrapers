@@ -7,6 +7,11 @@ team_source = requests.get('https://www.nba.com/teams').text
 soup = BeautifulSoup(team_source,'lxml')
 nba_teams = []
 
+output_file = open(f'nba_scores_{date.today()}.csv','w')
+
+writer = csv.writer(output_file)
+writer.writerow(['Winning Team','Score','Losing Team','Score','Best Player','Score'])
+
 for team in soup.find_all('div',class_='team__list'):
 	if team.text == 'Los Angeles Lakers':
 		nba_teams.append('LA Lakers')
@@ -44,5 +49,6 @@ for game in soup.find_all('div',class_='game_summary expanded nohover'):
 	player_score = player.find('td',class_='right').text
 	print(player_name,player_score,'\n')
 
+	writer.writerow([winner,winner_score,loser,loser_score,player_name,player_score])
 	
 
